@@ -1,7 +1,7 @@
 # Carvalho
 
 <p align="center">
-  <img src="assets/carvalho-logo.png" alt="Carvalho Logo" width="220">
+  <img src="assets/carvalho.png" alt="Carvalho Logo" width="220">
 </p>
 
 **Raízes fortes. Frutos duradouros.**
