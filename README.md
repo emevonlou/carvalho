@@ -1,5 +1,9 @@
 # Carvalho
 
+<p align="center">
+  <img src="docs/carvalho-logo.png" alt="Carvalho Logo" width="250">
+</p>
+
 **Raízes fortes. Frutos duradouros.**
 
 Carvalho é um organizador familiar desenvolvido em Python para auxiliar famílias no gerenciamento de compras, cardápio, finanças, rotina e planejamento doméstico.
