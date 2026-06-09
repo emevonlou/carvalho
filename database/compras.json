@@ -1,12 +1,1 @@
-[
-  {
-    "nome": "Banana",
-    "categoria": "Nosso Adolescente",
-    "comprado": true
-  },
-  {
-    "nome": "ovo",
-    "categoria": "Adultos",
-    "comprado": false
-  }
-]
+[]

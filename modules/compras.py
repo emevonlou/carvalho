@@ -37,6 +37,9 @@ class ComprasWidget(QWidget):
         self.item_input = QLineEdit()
         self.item_input.setPlaceholderText("Digite um item...")
 
+        self.valor_input = QLineEdit()
+        self.valor_input.setPlaceholderText("Valor (ex: 12.50)")
+
         self.categoria_input = QComboBox()
         self.categoria_input.addItems(
             [
@@ -51,22 +54,15 @@ class ComprasWidget(QWidget):
         self.add_button.clicked.connect(self.adicionar_item)
 
         form_layout.addWidget(self.item_input)
+        form_layout.addWidget(self.valor_input)
         form_layout.addWidget(self.categoria_input)
         form_layout.addWidget(self.add_button)
 
         self.lista = QListWidget()
 
-        self.remover_button = QPushButton(
-            "Remover item selecionado"
-        )
-        self.remover_button.clicked.connect(
-            self.remover_item
-        )
-
         layout.addWidget(titulo)
         layout.addLayout(form_layout)
         layout.addWidget(self.lista)
-        layout.addWidget(self.remover_button)
 
         self.setLayout(layout)
 
@@ -111,9 +107,17 @@ class ComprasWidget(QWidget):
 
     def adicionar_item(self):
         nome = self.item_input.text().strip()
+        valor_texto = self.valor_input.text().strip()
 
         if not nome:
             return
+
+        try:
+            valor = float(
+                valor_texto.replace(",", ".")
+            )
+        except ValueError:
+            valor = 0.0
 
         categoria = (
             self.categoria_input.currentText()
@@ -123,6 +127,7 @@ class ComprasWidget(QWidget):
             {
                 "nome": nome,
                 "categoria": categoria,
+                "valor": valor,
                 "comprado": False,
             }
         )
@@ -131,6 +136,8 @@ class ComprasWidget(QWidget):
         self.atualizar_lista()
 
         self.item_input.clear()
+        self.valor_input.clear()
+
 
     def atualizar_lista(self):
         self.lista.clear()
@@ -205,8 +212,11 @@ class ComprasWidget(QWidget):
         indice,
         item,
     ):
+        valor = item.get("valor", 0.0)
+
         texto = (
-            f"{item['nome']} - "
+            f"{item['nome']} | "
+            f"R$ {valor:.2f} | "
             f"{item['categoria']}"
         )
 
@@ -234,11 +244,20 @@ class ComprasWidget(QWidget):
             )
         )
 
+        remover_button = QPushButton("Remover")
+
+        remover_button.clicked.connect(
+            lambda _, i=indice: self.remover_por_indice(i)
+        )
+
         layout.addWidget(checkbox)
+        layout.addWidget(remover_button)
 
         widget.setLayout(layout)
 
         item_lista = QListWidgetItem()
+        
+        item_lista.setData(Qt.ItemDataRole.UserRole, indice)
 
         item_lista.setSizeHint(
             widget.sizeHint()
@@ -266,36 +285,30 @@ class ComprasWidget(QWidget):
         self.salvar_itens()
         self.atualizar_lista()
 
+    def remover_por_indice(self, indice):
+        if 0 <= indice < len(self.itens):
+            self.itens.pop(indice)
+
+            self.salvar_itens()
+            self.atualizar_lista()
+
     def remover_item(self):
         linha = self.lista.currentRow()
 
         if linha < 0:
             return
 
-        item = self.lista.item(linha)
+        item_lista = self.lista.item(linha)
 
-        if not item:
+        if item_lista is None:
             return
 
-        widget = self.lista.itemWidget(item)
+        indice = item_lista.data(Qt.ItemDataRole.UserRole)
 
-        if widget is None:
+        if indice is None:
             return
 
-        texto = (
-            widget.layout()
-            .itemAt(0)
-            .widget()
-            .text()
-        )
-
-        nome = texto.split(" - ")[0]
-
-        self.itens = [
-            item
-            for item in self.itens
-            if item["nome"] != nome
-        ]
+        self.itens.pop(indice)
 
         self.salvar_itens()
         self.atualizar_lista()
