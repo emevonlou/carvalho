@@ -27,6 +27,58 @@ class ComprasWidget(QWidget):
         self.setWindowTitle("Carvalho - Compras")
         self.itens = []
 
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #F5F1E8;
+                color: #3D2B1F;
+                font-family: Arial;
+            }
+
+            QLabel {
+                font-size: 24px;
+                font-weight: bold;
+                color: #3D2B1F;
+            }
+
+            QLineEdit, QComboBox {
+                background-color: #FFFDF7;
+                border: 2px solid #D8C7B2;
+                border-radius: 10px;
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            QListWidget {
+                background-color: #FFFDF7;
+                border: 2px solid #8A6A4F;
+                border-radius: 16px;
+                padding: 8px;
+                font-size: 14px;
+             }
+
+             QCheckBox {
+                 font-size: 14px;
+             }
+
+             QPushButton {
+                 background-color: #5E7A4D;
+                 color: white;
+                 font-size: 14px;
+                 font-weight: bold;
+                 border: 2px solid #4B5D3F;
+                 border-radius: 10px;
+                 padding: 8px;
+             }
+
+             QPushButton:hover {
+                 background-color: #6F8B5D;
+             }
+
+             QPushButton:pressed {
+                 background-color: #4B5D3F;
+             }
+         """)
+
         layout = QVBoxLayout()
 
         titulo = QLabel("Lista de Compras")
